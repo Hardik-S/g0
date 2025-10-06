@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "contribution-adder"
+version = "0.1.0"
+description = "Automation utilities for generating GitHub contribution commits."
+readme = "README.md"
+authors = [
+    { name = "Automation Bot" }
+]
+license = { text = "MIT" }
+requires-python = ">=3.11"
+dependencies = [
+    "GitPython>=3.1"
+]
+
+[project.optional-dependencies]
+dotenv = ["python-dotenv>=1.0"]
+
+[project.urls]
+Homepage = "https://example.com/contribution-adder"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
