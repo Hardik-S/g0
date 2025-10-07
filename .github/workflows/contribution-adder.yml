@@ -1,0 +1,30 @@
+name: Contribution Adder
+
+on:
+  schedule:
+    - cron: '5 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  run-contribution-adder:
+    name: Run contribution adder
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -e '.[dotenv]'
+
+      - name: Execute contribution adder
+        env:
+          TARGET_REPO: ${{ secrets.TARGET_REPO }}
+          CONTRIB_PAT: ${{ secrets.CONTRIB_PAT }}
+        run: python -m contribution_adder
