@@ -23,7 +23,21 @@ jobs:
       - name: Install dependencies
         run: pip install -e '.[dotenv]'
 
+      - name: Check contribution adder configuration
+        id: config
+        env:
+          HAS_TARGET_REPO: ${{ secrets.TARGET_REPO != '' }}
+          HAS_CONTRIB_PAT: ${{ secrets.CONTRIB_PAT != '' }}
+        run: |
+          if [ "$HAS_TARGET_REPO" = "true" ] && [ "$HAS_CONTRIB_PAT" = "true" ]; then
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "::notice title=Contribution adder skipped::Set TARGET_REPO and CONTRIB_PAT repository secrets to enable scheduled runs."
+          fi
+
       - name: Execute contribution adder
+        if: steps.config.outputs.configured == 'true'
         env:
           TARGET_REPO: ${{ secrets.TARGET_REPO }}
           CONTRIB_PAT: ${{ secrets.CONTRIB_PAT }}
